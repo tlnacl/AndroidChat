@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
+import com.firebase.androidchat.module.Chat;
 import com.firebase.client.Query;
 
 /**

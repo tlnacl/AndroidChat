@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.androidchat.module.Chat;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -22,7 +23,7 @@ import java.util.Random;
 public class MainActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://android-chat.firebaseio-demo.com";
+    private static final String FIREBASE_URL = "https://resplendent-heat-8281.firebaseio.com";
 
     private String mUsername;
     private Firebase mFirebaseRef;
