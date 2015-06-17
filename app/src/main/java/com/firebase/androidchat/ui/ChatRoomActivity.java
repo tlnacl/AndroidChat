@@ -1,8 +1,8 @@
-package com.firebase.androidchat;
+package com.firebase.androidchat.ui;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,6 +12,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.androidchat.FireBaseHelper;
+import com.firebase.androidchat.R;
+import com.firebase.androidchat.adapter.ChatListAdapter;
 import com.firebase.androidchat.module.Chat;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -20,11 +23,11 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.Random;
 
-public class MainActivity extends ListActivity {
-
-    // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://resplendent-heat-8281.firebaseio.com";
-
+/**
+ * Created by tlnacl on 17/06/15.
+ */
+public class ChatRoomActivity extends ListActivity{
+    public static final String EXTRA_ROOM_NAME = "extra_room_name";
     private String mUsername;
     private Firebase mFirebaseRef;
     private ValueEventListener mConnectedListener;
@@ -33,15 +36,21 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_chat_room);
 
         // Make sure we have a mUsername
         setupUsername();
 
         setTitle("Chatting as " + mUsername);
 
+        String roomName = null;
+        Intent intent = getIntent();
+        if (intent != null) {
+            roomName = intent.getStringExtra(EXTRA_ROOM_NAME);
+        }
+
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
+        mFirebaseRef = FireBaseHelper.getInstance().child(roomName).child("chat");
 
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         EditText inputText = (EditText) findViewById(R.id.messageInput);
@@ -72,13 +81,13 @@ public class MainActivity extends ListActivity {
         // Tell our list adapter that we only want 50 messages at a time
         mChatListAdapter = new ChatListAdapter(mFirebaseRef.limit(50), this, R.layout.chat_message, mUsername);
         listView.setAdapter(mChatListAdapter);
-        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                listView.setSelection(mChatListAdapter.getCount() - 1);
-            }
-        });
+//        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
+//            @Override
+//            public void onChanged() {
+//                super.onChanged();
+//                listView.setSelection(mChatListAdapter.getCount() - 1);
+//            }
+//        });
 
         // Finally, a little indication of connection status
         mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
@@ -86,9 +95,9 @@ public class MainActivity extends ListActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean connected = (Boolean) dataSnapshot.getValue();
                 if (connected) {
-                    Toast.makeText(MainActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChatRoomActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChatRoomActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -113,7 +122,7 @@ public class MainActivity extends ListActivity {
             Random r = new Random();
             // Assign a random user name if we don't have one saved.
             mUsername = "JavaUser" + r.nextInt(100000);
-            prefs.edit().putString("username", mUsername).commit();
+            prefs.edit().putString("username", mUsername).apply();
         }
     }
 

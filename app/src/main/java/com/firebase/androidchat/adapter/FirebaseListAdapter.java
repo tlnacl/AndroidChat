@@ -1,4 +1,4 @@
-package com.firebase.androidchat;
+package com.firebase.androidchat.adapter;
 
 import android.app.Activity;
 import android.util.Log;
