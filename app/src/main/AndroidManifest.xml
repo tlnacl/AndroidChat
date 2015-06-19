@@ -3,6 +3,10 @@
     package="com.firebase.androidchat">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- USE_CREDENTIALS is necessary for Google+ login -->
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <!-- GET_ACCOUNTS is necessary to display email address of logged in user. This permission is optional -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:name="com.firebase.androidchat.ChatApplication"
@@ -13,14 +17,22 @@
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name">
+        </activity>
+
+        <activity android:name=".ui.LoginActivity">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
+            </activity>
         <activity android:name=".ui.ChatRoomActivity"/>
+
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

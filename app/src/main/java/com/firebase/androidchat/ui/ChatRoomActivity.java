@@ -50,7 +50,7 @@ public class ChatRoomActivity extends ListActivity{
         }
 
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = FireBaseHelper.getInstance().child(roomName).child("chat");
+        mFirebaseRef = FireBaseHelper.getPoint().child(roomName).child("chat");
 
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         EditText inputText = (EditText) findViewById(R.id.messageInput);
